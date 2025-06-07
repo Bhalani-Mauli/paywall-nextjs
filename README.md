@@ -40,3 +40,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - To init prisma for the very first time I have used `npx prisma init --datasource-provider sqlite`
 - I have also added `DATABASE_URL="file:./dev.db"` in .env file
 - I have create sql lite database by running `npx prisma migrate dev --name init`
+
+**Whenever you change something in schema.prisma**
+Please run:
+`npx prisma migrate dev --name add-user-table` (change reason as needed)
