@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { Menu, X } from "lucide-react";
 
 import Spinner from "@/components/atoms/Spinner/Spinner";
 import { useUser } from "@/components/context/UserProvider";
@@ -12,6 +14,7 @@ export default function Navigation() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, setUser, loading } = useUser();
+  const [open, setOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -35,7 +38,16 @@ export default function Navigation() {
         <Link href="/" className={styles.logo}>
           LearnToday
         </Link>
-        <div className={styles.nav}>
+
+        <button
+          className={styles.hamburger}
+          onClick={() => setOpen(!open)}
+          aria-label="Toggle menu"
+        >
+          {open ? <X size={24} /> : <Menu size={24} />}
+        </button>
+
+        <div className={`${styles.nav} ${open ? styles.open : ""}`}>
           {user ? (
             <>
               <nav className={styles.navLinks}>
@@ -44,6 +56,7 @@ export default function Navigation() {
                   className={
                     isActive("/dashboard") ? styles.activeLink : styles.link
                   }
+                  onClick={() => setOpen(false)}
                 >
                   Dashboard
                 </Link>
@@ -52,6 +65,7 @@ export default function Navigation() {
                   className={
                     isActive("/courses") ? styles.activeLink : styles.link
                   }
+                  onClick={() => setOpen(false)}
                 >
                   Courses
                 </Link>
@@ -60,6 +74,7 @@ export default function Navigation() {
                   className={
                     isActive("/subscription") ? styles.activeLink : styles.link
                   }
+                  onClick={() => setOpen(false)}
                 >
                   Subscription
                 </Link>
@@ -70,10 +85,18 @@ export default function Navigation() {
             </>
           ) : (
             <div className={styles.authButtons}>
-              <Link href="/auth/login" className={styles.loginBtn}>
+              <Link
+                href="/auth/login"
+                className={styles.loginBtn}
+                onClick={() => setOpen(false)}
+              >
                 Login
               </Link>
-              <Link href="/auth/signup" className={styles.signupBtn}>
+              <Link
+                href="/auth/signup"
+                className={styles.signupBtn}
+                onClick={() => setOpen(false)}
+              >
                 Sign Up
               </Link>
             </div>
