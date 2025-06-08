@@ -6,13 +6,14 @@ export default function Button({
   loading = false,
   variant = "primary",
   children,
+  className = "",
   ...props
 }) {
   return (
     <button
       type={type}
       disabled={disabled || loading}
-      className={`${styles.button} ${styles[variant]}`}
+      className={`${className} ${styles.button} ${styles[variant]}`}
       {...props}
     >
       {loading ? "Loading..." : children}

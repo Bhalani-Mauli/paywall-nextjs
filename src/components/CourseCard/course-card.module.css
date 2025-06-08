@@ -1,0 +1,104 @@
+.card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.thumbnailContainer {
+  height: 192px;
+  background: linear-gradient(to right, #3b82f6, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumbnailImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.defaultIcon {
+  width: 64px;
+  height: 64px;
+  color: white;
+}
+
+.content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.premiumBadge {
+  background-color: #fef3c7;
+  color: #92400e;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 9999px;
+}
+
+.description {
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin-bottom: 16px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.lessonInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.lessonCount {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.lockedMessage {
+  font-size: 0.875rem;
+  color: #dc2626;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.lockIcon {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.link {
+  width: 100%;
+  text-decoration: none;
+}
+
+.secondaryButton:hover {
+  background-color: #d97706;
+}
