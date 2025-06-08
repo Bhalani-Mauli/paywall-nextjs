@@ -15,6 +15,9 @@ export async function POST(request) {
 
     const newUser = await db.user.findUnique({
       where: { email },
+      include: {
+        subscription: true,
+      },
     });
 
     if (!newUser) {
@@ -41,6 +44,7 @@ export async function POST(request) {
         id: newUser.id,
         name: newUser.name,
         email: newUser.email,
+        subscription: newUser.subscription,
       },
     });
 
@@ -53,7 +57,7 @@ export async function POST(request) {
 
     return response;
   } catch (error) {
-    console.error("Login error:", error);
+    console.error("Login error:", error.message);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

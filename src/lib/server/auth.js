@@ -20,24 +20,23 @@ export const verifyToken = (token) => {
   try {
     return jwt.verify(token, JWT_SECRET);
   } catch {
-    return null;
+    console.error("Token verification failed:", error.message);
+    throw new Error("Invalid token");
   }
 };
 
 export const getUserFromToken = async (request) => {
   try {
     let token = null;
-
     const authHeader = request.headers.get("authorization");
-    if (authHeader && !authHeader.startsWith("Bearer ")) {
-      token = authHeader.substring(7); //remove Bearer
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1] ?? null;
     }
 
     if (!token) {
       token = request.cookies.get("auth-token")?.value ?? null;
     }
-
-    const decoded = token && verifyToken(token);
+    const decoded = verifyToken(token);
     if (!decoded) return null;
 
     const user = await db.user.findUnique({
@@ -47,6 +46,6 @@ export const getUserFromToken = async (request) => {
     return user;
   } catch (error) {
     console.error("Error getting user from token:", error);
-    return null;
+    throw new Error("Failed to get user from token");
   }
 };
