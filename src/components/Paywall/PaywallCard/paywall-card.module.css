@@ -1,0 +1,69 @@
+.card {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  border: 2px solid #e5e7eb;
+  flex: 1 1;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+.priceSection {
+  margin-bottom: 1.5rem;
+}
+
+.price {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.period {
+  color: #4b5563;
+  margin-left: 0.25rem;
+}
+
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 2rem;
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #10b981;
+  margin-right: 0.5rem;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.subscribeButton {
+  display: block;
+  width: 100%;
+  background-color: #e5e7eb;
+  color: #1f2937;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+}
+
+.subscribeButton:hover {
+  background-color: #d1d5db;
+}
