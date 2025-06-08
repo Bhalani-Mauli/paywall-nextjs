@@ -18,6 +18,80 @@ model User {
   name      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+  courseProgress CourseProgress[]
+  subscription Subscription?
+
   @@map("users")
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  thumbnail   String?
+  isPremium   Boolean  @default(false)
+  isPublished Boolean  @default(false)
+  price       Float?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  lessons Lesson[]
+  courseProgress CourseProgress[]
+  
+  @@map("courses")
+}
+
+
+model Lesson {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  videoUrl    String?
+  duration    Int?     // in seconds
+  order       Int
+  isPremium   Boolean  @default(false)
+  isPublished Boolean  @default(false)
+  
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("lessons")
+}
+
+model CourseProgress {
+  id               String   @id @default(cuid())
+  userId           String
+  courseId         String
+  isCompleted      Boolean  @default(false)
+  completedLessons Int      @default(0)
+  totalLessons     Int      @default(0)
+  
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([userId, courseId])
+  @@map("course_progress")
+}
+
+model Subscription {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  plan      String   // "free", "premium", "pro"
+  status    String   // "active", "cancelled", "expired"
+  startDate DateTime @default(now())
+  endDate   DateTime?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("subscriptions")
 }

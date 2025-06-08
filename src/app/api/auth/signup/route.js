@@ -35,6 +35,15 @@ export async function POST(request) {
         name,
         email,
         password: hashedPassword,
+        subscription: {
+          create: {
+            plan: "free",
+            status: "active",
+          },
+        },
+      },
+      include: {
+        subscription: true,
       },
     });
 
@@ -46,6 +55,7 @@ export async function POST(request) {
         id: newUser.id,
         name: newUser.name,
         email: newUser.email,
+        subscription: newUser.subscription,
       },
     });
 
@@ -58,7 +68,7 @@ export async function POST(request) {
 
     return response;
   } catch (error) {
-    console.error("Signup error:", error);
+    console.error("Signup error:", error.message);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
