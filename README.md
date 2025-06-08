@@ -44,3 +44,12 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 **Whenever you change something in schema.prisma**
 Please run:
 `npx prisma migrate dev --name add-user-table` (change reason as needed)
+
+**Feed data into database**
+
+- I have created seed.js file to add data to database so that for development purpose we can use it.
+  `yarn seed-dev` or `npm run seed-dev`
+
+**Reset database and seed data**
+
+- `npx prisma migrate reset` (this will recreate schema so data will be lost.)
