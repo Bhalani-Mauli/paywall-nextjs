@@ -44,6 +44,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 **Whenever you change something in schema.prisma**
 Please run:
 `npx prisma migrate dev --name add-user-table` (change reason as needed)
+`npx prisma db push` (to apply migration to database)
 
 **Feed data into database**
 
