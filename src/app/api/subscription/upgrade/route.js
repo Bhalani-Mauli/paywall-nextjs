@@ -10,9 +10,10 @@ export async function POST(request) {
       return NextResponse.json({ error: "No token provided" }, { status: 401 });
     }
 
-    const { plan, paymentData } = await request.json();
+    const { plan, paymentData } = await request.json(); // extract lowercase plan
+    const planLower = plan.toLowerCase();
 
-    if (!["premium", "pro"].includes(plan.toLowerCase())) {
+    if (!["premium", "pro"].includes(planLower)) {
       return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
     }
 
@@ -29,19 +30,19 @@ export async function POST(request) {
 
     const startDate = new Date();
     const endDate = new Date();
-    endDate.setMonth(endDate.getMonth() + (plan === "premium" ? 1 : 12));
+    endDate.setMonth(endDate.getMonth() + (planLower === "premium" ? 1 : 12));
 
     const subscription = await db.subscription.upsert({
       where: { userId: user.id },
       update: {
-        plan,
+        planLower,
         status: "active",
         startDate,
         endDate,
       },
       create: {
         userId: user.id,
-        plan,
+        planLower,
         status: "active",
         startDate,
         endDate,
