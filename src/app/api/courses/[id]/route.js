@@ -14,6 +14,14 @@ export async function GET(request, { params }) {
           where: { isPublished: true },
           orderBy: { order: "asc" },
         },
+        courseProgress: {
+          where: { userId: user?.id },
+          select: {
+            completedLessons: true,
+            totalLessons: true,
+            isCompleted: true,
+          },
+        },
       },
     });
 
