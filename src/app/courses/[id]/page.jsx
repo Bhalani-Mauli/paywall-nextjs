@@ -63,11 +63,15 @@ export default function CourseDetailPage() {
   const handleMarkComplete = async () => {
     const newCompleted = completedLessons + 1;
     // TODO(mauli) - Implement API call to mark lesson as complete
+    const totalCompleted =
+      newCompleted > course.lessons.length
+        ? course.lessons.length
+        : newCompleted;
     const response = await fetch(`/api/progress/course`, {
       method: "POST",
       body: JSON.stringify({
         courseId,
-        completedLessons: newCompleted,
+        completedLessons: totalCompleted,
         totalLessons: course.lessons.length,
       }),
     });
