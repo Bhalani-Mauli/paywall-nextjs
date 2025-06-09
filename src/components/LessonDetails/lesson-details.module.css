@@ -1,0 +1,81 @@
+.container {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.description {
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+
+.detailsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.lessonInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.infoItem {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.premiumBadge {
+  background-color: #fef3c7;
+  color: #92400e;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.completeButton {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.completed {
+  background-color: #16a34a;
+  color: white;
+}
+
+.completed:hover {
+  background-color: #15803d;
+}
+
+.notCompleted {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+.notCompleted:hover {
+  background-color: #d1d5db;
+}
+
+.completedContent {
+  display: flex;
+  align-items: center;
+}
+
+.checkIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.25rem;
+}

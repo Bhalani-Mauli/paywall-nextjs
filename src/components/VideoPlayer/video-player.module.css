@@ -1,0 +1,52 @@
+.container {
+  background-color: #000;
+  border-radius: 0.5rem;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.playerContent {
+  text-align: center;
+  color: white;
+}
+
+.playIcon {
+  width: 4rem;
+  height: 4rem;
+  color: white;
+  margin: 0 auto 1rem auto;
+}
+
+.lessonTitle {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.duration {
+  color: #d1d5db;
+}
+
+.mockText {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  margin-top: 1rem;
+}
+
+.lockedContent {
+  text-align: center;
+  color: #9ca3af;
+}
+
+.lockIcon {
+  width: 4rem;
+  height: 4rem;
+  color: #9ca3af;
+  margin: 0 auto 1rem auto;
+}
+
+.lockedText {
+  font-size: 1.25rem;
+}
