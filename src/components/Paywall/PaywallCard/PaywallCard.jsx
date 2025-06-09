@@ -8,15 +8,13 @@ export default function PaywallCard({
   price,
   period,
   features,
-  onSubscribe,
+  isPremium = false,
+  buttonVariant,
+  onSubscribe = () => {},
+  buttonText,
 }) {
-  const configMap = {
-    Free: { btn: "secondary", text: "Free forever" },
-    Premium: { btn: "primary", text: "Upgrade " + title },
-    Pro: { btn: "primary", text: "Upgrade " + title },
-  };
   return (
-    <div className={styles.card}>
+    <div className={`${isPremium && styles.premiumStyles} ${styles.card}`}>
       <h3 className={styles.title}>{title}</h3>
       <div className={styles.priceSection}>
         <span className={styles.price}>{price}</span>
@@ -30,11 +28,9 @@ export default function PaywallCard({
           </li>
         ))}
       </ul>
-      <Link href="/subscription" className={styles.link}>
-        <Button variant={configMap[title].btn}>
-          {configMap[title].text ?? "Subscribe"}
-        </Button>
-      </Link>
+      <Button onClick={() => onSubscribe(title)} variant={buttonVariant}>
+        {buttonText}
+      </Button>
     </div>
   );
 }

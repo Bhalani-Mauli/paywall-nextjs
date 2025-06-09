@@ -1,7 +1,10 @@
+import Paywall from "@/components/Paywall/Paywall";
+import styles from "./subscription.module.css";
+
 export default function CoursesPage() {
   return (
-    <div>
-      <p>Subscriptions page</p>
+    <div className={styles.container}>
+      <Paywall />
     </div>
   );
 }

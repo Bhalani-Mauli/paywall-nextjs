@@ -67,3 +67,8 @@
 .subscribeButton:hover {
   background-color: #d1d5db;
 }
+
+.premiumStyles {
+  border-color: #2563eb;
+  background-color: #2b80ff13;
+}

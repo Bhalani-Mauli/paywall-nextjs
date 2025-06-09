@@ -12,6 +12,14 @@ export async function GET(request) {
 
     const userWithProgress = await db.user.findUnique({
       where: { id: user.id },
+      include: {
+        subscription: true,
+        courseProgress: {
+          include: {
+            course: true,
+          },
+        },
+      },
     });
 
     if (!userWithProgress) {
@@ -23,6 +31,8 @@ export async function GET(request) {
         id: userWithProgress.id,
         name: userWithProgress.name,
         email: userWithProgress.email,
+        subscription: userWithProgress.subscription,
+        courseProgress: userWithProgress.courseProgress,
       },
     });
   } catch (error) {
