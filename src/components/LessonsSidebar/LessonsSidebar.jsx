@@ -4,7 +4,7 @@ import styles from "./lesson-sidebar.module.css";
 export default function LessonsSidebar({
   lessons,
   selectedLesson,
-  lessonProgress,
+  lessonProgress = {},
   courseProgress,
   hasAccess,
   onLessonSelect,
@@ -67,8 +67,7 @@ export default function LessonsSidebar({
           />
         </div>
         <p className={styles.progressText}>
-          {Object.values(lessonProgress).filter(Boolean).length} of{" "}
-          {lessons.length} lessons completed ({courseProgress}%)
+          lessons completed ({courseProgress}%)
         </p>
       </div>
     </div>

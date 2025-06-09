@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import Spinner from "@/components/atoms/Spinner/Spinner";
 import CourseHeader from "@/components/CourseHeader/CourseHeader";
@@ -15,13 +14,14 @@ export default function CourseDetailPage() {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedLesson, setSelectedLesson] = useState(null);
-  const [lessonProgress, setLessonProgress] = useState({});
+  const [completedLessons, setCompletedLessons] = useState(0);
   const [courseProgress, setCourseProgress] = useState(0);
   const router = useRouter();
   const params = useParams();
   const courseId = params.id;
 
   useEffect(() => {
+    // Mocking behaviour for showing progress bar
     const fetchData = async () => {
       try {
         const response = await fetch(`/api/courses/${courseId}`);
@@ -29,11 +29,17 @@ export default function CourseDetailPage() {
           throw new Error("Failed to fetch course");
         }
         const data = await response.json();
-        console.log("Course data:", data);
+
         setCourse(data.course);
         if (data.course.lessons.length > 0) {
           setSelectedLesson(data.course.lessons[0]);
         }
+        const completed = data.course.progress.completedLessons || 0;
+        const progressPercent = Math.round(
+          (completed / data.course.lessons.length) * 100
+        );
+        setCompletedLessons(completed);
+        setCourseProgress(progressPercent <= 100 ? progressPercent : 100);
       } catch (error) {
         console.error("Error fetching data:", error);
         router.push("/courses");
@@ -47,17 +53,6 @@ export default function CourseDetailPage() {
     }
   }, [courseId, router]);
 
-  useEffect(() => {
-    if (course) {
-      const completedLessons =
-        Object.values(lessonProgress).filter(Boolean).length;
-      const progress = Math.round(
-        (completedLessons / course.lessons.length) * 100
-      );
-      setCourseProgress(progress);
-    }
-  }, [lessonProgress, course]);
-
   const handleLessonSelect = (lesson) => {
     const canAccess = course.hasAccess || !lesson.isPremium;
     if (canAccess) {
@@ -65,12 +60,30 @@ export default function CourseDetailPage() {
     }
   };
 
-  const handleMarkComplete = (lessonId) => {
+  const handleMarkComplete = async () => {
+    const newCompleted = completedLessons + 1;
     // TODO(mauli) - Implement API call to mark lesson as complete
-    setLessonProgress((prev) => ({
-      ...prev,
-      [lessonId]: prev[lessonId] ? false : true,
-    }));
+    const response = await fetch(`/api/progress/course`, {
+      method: "POST",
+      body: JSON.stringify({
+        courseId,
+        completedLessons: newCompleted,
+        totalLessons: course.lessons.length,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error("Failed to update lesson progress");
+      return;
+    }
+
+    setCompletedLessons(newCompleted);
+    const newProgress = Math.round(
+      (newCompleted / course.lessons.length) * 100
+    );
+    if (newProgress <= 100) {
+      setCourseProgress(newProgress);
+    }
   };
 
   if (loading) {
@@ -94,29 +107,24 @@ export default function CourseDetailPage() {
     <div className={styles.container}>
       <div className={styles.wrapper}>
         <CourseHeader course={course} />
-
         <div className={styles.grid}>
           <div className={styles.videoSection}>
             <VideoPlayer
               selectedLesson={selectedLesson}
               hasAccess={course.hasAccess}
             />
-
             {selectedLesson && (
               <LessonDetails
                 lesson={selectedLesson}
                 hasAccess={course.hasAccess}
-                isCompleted={lessonProgress[selectedLesson.id]}
-                onMarkComplete={() => handleMarkComplete(selectedLesson.id)}
+                onMarkComplete={handleMarkComplete}
               />
             )}
           </div>
-
           <div className={styles.sidebarSection}>
             <LessonsSidebar
               lessons={course.lessons}
               selectedLesson={selectedLesson}
-              lessonProgress={lessonProgress}
               courseProgress={courseProgress}
               hasAccess={course.hasAccess}
               onLessonSelect={handleLessonSelect}
