@@ -57,7 +57,6 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
-    console.log("Update course progress request received");
     let user = await getUserFromToken(request);
     if (!user) {
       return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
@@ -95,7 +94,6 @@ export async function POST(request) {
         totalLessons,
       },
     });
-    console.log("Course progress updated:", courseProgress);
 
     return NextResponse.json({ courseProgress });
   } catch (error) {
