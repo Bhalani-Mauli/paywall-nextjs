@@ -1,0 +1,72 @@
+.container {
+  margin-bottom: 1.5rem;
+}
+
+.backLink {
+  color: #2563eb;
+  text-decoration: none;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.backLink:hover {
+  color: #1d4ed8;
+}
+
+.title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.description {
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+
+.premiumBanner {
+  background-color: #fefce8;
+  border: 1px solid #fde047;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.premiumContent {
+  display: flex;
+  align-items: center;
+}
+
+.premiumIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #facc15;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+.premiumTitle {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #92400e;
+}
+
+.premiumText {
+  color: #a16207;
+}
+
+.upgradeButton {
+  display: inline-block;
+  margin-top: 0.5rem;
+  background-color: #d97706;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.upgradeButton:hover {
+  background-color: #b45309;
+}
