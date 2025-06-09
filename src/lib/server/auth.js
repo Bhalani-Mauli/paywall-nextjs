@@ -41,6 +41,9 @@ export const getUserFromToken = async (request) => {
 
     const user = await db.user.findUnique({
       where: { id: decoded.userId },
+      include: {
+        subscription: true,
+      },
     });
 
     return user;
