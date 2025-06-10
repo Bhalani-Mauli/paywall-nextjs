@@ -11,7 +11,6 @@ export function UserProvider({ children }) {
     (async () => {
       setLoading(true);
       const userResponse = await fetch("/api/user/profile");
-      console.log("User response:", userResponse);
       if (userResponse.ok) {
         const userData = await userResponse.json();
         setUser(userData.user);

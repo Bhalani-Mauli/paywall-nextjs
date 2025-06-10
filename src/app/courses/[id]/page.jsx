@@ -34,7 +34,7 @@ export default function CourseDetailPage() {
         if (data.course.lessons.length > 0) {
           setSelectedLesson(data.course.lessons[0]);
         }
-        const completed = data.course.progress.completedLessons || 0;
+        const completed = data.course?.progress?.completedLessons || 0;
         const progressPercent = Math.round(
           (completed / data.course.lessons.length) * 100
         );
