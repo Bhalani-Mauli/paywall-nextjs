@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/server/db";
-import { getUserFromToken } from "@/lib/server/auth";
+import { getUser } from "@/lib/server/auth";
 
 export async function GET(request) {
   try {
-    const user = await getUserFromToken(request);
+    const user = await getUser(request);
+
     const courses = await db.course.findMany({
       where: { isPublished: true },
       include: {
