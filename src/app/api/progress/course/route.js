@@ -4,48 +4,47 @@ import { getUserFromToken } from "@/lib/server/auth";
 
 export async function GET(request) {
   try {
-    let user = await getUserFromToken(request);
+    const user = await getUserFromToken(request);
+
     if (!user) {
-      return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { searchParams } = new URL(request.url);
-    const courseId = searchParams.get("courseId");
-
-    if (courseId) {
-      const courseProgress = await db.courseProgress.findUnique({
-        where: {
-          userId_courseId: {
-            userId: user.id,
-            courseId: courseId,
-          },
-        },
-        include: {
-          course: {
-            select: {
-              id: true,
-              title: true,
-              _count: {
-                select: { lessons: true },
-              },
+    const courseProgressList = await db.courseProgress.findMany({
+      where: {
+        userId: user.id,
+      },
+      include: {
+        course: {
+          select: {
+            id: true,
+            title: true,
+            _count: {
+              select: { lessons: true },
             },
           },
         },
-      });
+      },
+    });
 
-      return NextResponse.json({
-        courseProgress,
-        totalLessons: courseProgress?.course._count.lessons || 0,
-        completedLessons: courseProgress?.completedLessons || 0,
-        progressPercentage: courseProgress
-          ? Math.round(
-              (courseProgress.completedLessons /
-                courseProgress.course._count.lessons) *
-                100
-            )
-          : 0,
-      });
-    }
+    const progressData = courseProgressList.map((progress) => {
+      const totalLessons = progress.course._count.lessons || 0;
+      const completedLessons = progress.completedLessons || 0;
+      const progressPercentage =
+        totalLessons > 0
+          ? Math.round((completedLessons / totalLessons) * 100)
+          : 0;
+
+      return {
+        courseId: progress.course.id,
+        title: progress.course.title,
+        totalLessons,
+        completedLessons,
+        progressPercentage,
+      };
+    });
+
+    return NextResponse.json({ progress: progressData });
   } catch (error) {
     console.error("Get course progress error:", error);
     return NextResponse.json(
