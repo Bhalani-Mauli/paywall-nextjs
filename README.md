@@ -64,3 +64,7 @@ Please run:
 **Reset database and seed data**
 
 - `npx prisma migrate reset` (this will recreate schema so data will be lost.)
+
+# Demo Video
+
+[Watch a demo of the project here!](https://github.com/Bhalani-Mauli/paywall-nextjs/blob/main/PaywallRecordDemo.mp4?raw=true)
