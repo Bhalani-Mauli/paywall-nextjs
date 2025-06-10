@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import styles from "./course-progress.module.css";
 import CourseSmallCard from "../CourseSmallCard/CourseSmallCard";
