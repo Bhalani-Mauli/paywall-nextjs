@@ -47,7 +47,7 @@ export async function POST(request) {
       },
     });
 
-    const token = generateToken(newUser.id);
+    const token = await generateToken(newUser.id);
 
     const response = NextResponse.json({
       message: "User created successfully",

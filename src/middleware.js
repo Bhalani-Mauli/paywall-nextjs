@@ -38,68 +38,68 @@ export async function middleware(request) {
   }
 
   if (!token) {
-    token = request.cookies.get("auth-token")?.value;
-  }
+    const cookieToken = request.cookies.get("auth-token");
+    token = cookieToken?.value || null;
+    const isProtectedFrontend = protectedFrontendRoutes.some((route) =>
+      pathname.startsWith(route)
+    );
+    const isProtectedApi = protectedApiRoutes.some((route) =>
+      pathname.startsWith(route)
+    );
+    const isAuthRoute = authRoutes.includes(pathname);
 
-  const isProtectedFrontend = protectedFrontendRoutes.some((route) =>
-    pathname.startsWith(route)
-  );
-  const isProtectedApi = protectedApiRoutes.some((route) =>
-    pathname.startsWith(route)
-  );
-  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
+    if (isProtectedApi) {
+      if (!token) {
+        return NextResponse.json(
+          { error: "Unauthorized - No token provided" },
+          { status: 401 }
+        );
+      }
 
-  if (isProtectedApi) {
-    if (!token) {
-      return NextResponse.json(
-        { error: "Unauthorized - No token provided" },
-        { status: 401 }
-      );
+      const decoded = await verifyTokenMiddleware(token);
+      if (!decoded) {
+        return NextResponse.json(
+          { error: "Unauthorized - Invalid token" },
+          { status: 401 }
+        );
+      }
+
+      const requestHeaders = new Headers(request.headers);
+      requestHeaders.set("x-user-id", decoded.userId);
+
+      return NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      });
     }
 
-    const decoded = await verifyTokenMiddleware(token);
-    if (!decoded) {
-      return NextResponse.json(
-        { error: "Unauthorized - Invalid token" },
-        { status: 401 }
-      );
+    if (isProtectedFrontend) {
+      if (!token) {
+        return NextResponse.redirect(new URL("/auth/login", request.url));
+      }
+
+      const decoded = await verifyTokenMiddleware(token);
+      if (!decoded) {
+        const response = NextResponse.redirect(
+          new URL("/auth/login", request.url)
+        );
+        response.cookies.delete("auth-token");
+        return response;
+      }
+
+      return NextResponse.next();
     }
 
-    const requestHeaders = new Headers(request.headers);
-    requestHeaders.set("x-user-id", decoded.userId);
-
-    return NextResponse.next({
-      request: {
-        headers: requestHeaders,
-      },
-    });
-  }
-
-  if (isProtectedFrontend) {
-    if (!token) {
-      return NextResponse.redirect(new URL("/auth/login", request.url));
-    }
-
-    const decoded = await verifyTokenMiddleware(token);
-    if (!decoded) {
-      const response = NextResponse.redirect(
-        new URL("/auth/login", request.url)
-      );
-      response.cookies.delete("auth-token");
-      return response;
+    if (isAuthRoute && token) {
+      const decoded = await verifyTokenMiddleware(token);
+      if (decoded) {
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+      }
     }
 
     return NextResponse.next();
   }
-
-  if (isAuthRoute && token) {
-    const decoded = await verifyTokenMiddleware(token);
-    if (decoded) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
-  }
-
-  return NextResponse.next();
 }
 
 export const config = {
