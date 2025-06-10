@@ -1,18 +1,13 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/server/db";
-import { getUserFromToken } from "@/lib/server/auth";
 
 export async function GET(request) {
   try {
-    const user = await getUserFromToken(request);
-
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const userId = request.headers.get("x-user-id");
 
     const courseProgressList = await db.courseProgress.findMany({
       where: {
-        userId: user.id,
+        userId: userId,
       },
       include: {
         course: {
@@ -56,10 +51,7 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
-    let user = await getUserFromToken(request);
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
-    }
+    const userId = request.headers.get("x-user-id");
 
     const {
       courseId,
@@ -78,7 +70,7 @@ export async function POST(request) {
     const courseProgress = await db.courseProgress.upsert({
       where: {
         userId_courseId: {
-          userId: user.id,
+          userId: userId,
           courseId: courseId,
         },
       },
@@ -87,7 +79,7 @@ export async function POST(request) {
         totalLessons,
       },
       create: {
-        userId: user.id,
+        userId: userId,
         courseId,
         completedLessons,
         totalLessons,

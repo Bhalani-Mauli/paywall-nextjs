@@ -1,14 +1,9 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/server/db";
-import { getUserFromToken } from "@/lib/server/auth";
 
 export async function POST(request) {
   try {
-    const user = await getUserFromToken(request);
-
-    if (!user) {
-      return NextResponse.json({ error: "No token provided" }, { status: 401 });
-    }
+    const userId = request.headers.get("x-user-id");
 
     const { plan, paymentData } = await request.json(); // extract lowercase plan
     const planLower = plan.toLowerCase();
@@ -33,16 +28,16 @@ export async function POST(request) {
     endDate.setMonth(endDate.getMonth() + (planLower === "premium" ? 1 : 12));
 
     const subscription = await db.subscription.upsert({
-      where: { userId: user.id },
+      where: { userId: userId },
       update: {
-        planLower,
+        plan: planLower,
         status: "active",
         startDate,
         endDate,
       },
       create: {
-        userId: user.id,
-        planLower,
+        userId: userId,
+        plan: planLower,
         status: "active",
         startDate,
         endDate,

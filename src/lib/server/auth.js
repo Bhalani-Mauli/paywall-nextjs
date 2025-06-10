@@ -1,8 +1,9 @@
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import { SignJWT, jwtVerify } from "jose";
 import { db } from "./db";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+const secret = new TextEncoder().encode(JWT_SECRET);
 
 export const hashPassword = async (password) => {
   return await bcrypt.hash(password, 12);
@@ -12,35 +13,32 @@ export const comparePassword = async (password, hashedPassword) => {
   return await bcrypt.compare(password, hashedPassword);
 };
 
-export const generateToken = (userId) => {
-  return jwt.sign({ userId }, JWT_SECRET, { expiresIn: "7d" });
+export const generateToken = async (userId) => {
+  const token = await new SignJWT({ userId })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("7d")
+    .sign(secret);
+
+  return token;
 };
 
-export const verifyToken = (token) => {
+export const verifyToken = async (token) => {
   try {
-    return jwt.verify(token, JWT_SECRET);
-  } catch {
+    const { payload } = await jwtVerify(token, secret);
+    return payload;
+  } catch (error) {
     console.error("Token verification failed:", error.message);
     throw new Error("Invalid token");
   }
 };
 
-export const getUserFromToken = async (request) => {
+export const getUser = async (request) => {
   try {
     let token = null;
-    const authHeader = request.headers.get("authorization");
-    if (authHeader && authHeader.startsWith("Bearer ")) {
-      token = authHeader.split(" ")[1] ?? null;
-    }
-
-    if (!token) {
-      token = request.cookies.get("auth-token")?.value ?? null;
-    }
-    const decoded = verifyToken(token);
-    if (!decoded) return null;
-
+    const userId = request.headers.get("x-user-id");
     const user = await db.user.findUnique({
-      where: { id: decoded.userId },
+      where: { id: userId },
       include: {
         subscription: true,
       },

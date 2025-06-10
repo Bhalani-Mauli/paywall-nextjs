@@ -1,17 +1,12 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/server/db";
-import { getUserFromToken } from "@/lib/server/auth";
 
 export async function GET(request) {
   try {
-    const user = await getUserFromToken(request);
-
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const userId = request.headers.get("x-user-id");
 
     const userWithProgress = await db.user.findUnique({
-      where: { id: user.id },
+      where: { id: userId },
       include: {
         subscription: true,
         courseProgress: {
