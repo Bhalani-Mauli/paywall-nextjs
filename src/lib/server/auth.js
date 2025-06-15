@@ -35,7 +35,6 @@ export const verifyToken = async (token) => {
 
 export const getUser = async (request) => {
   try {
-    let token = null;
     const userId = request.headers.get("x-user-id");
     const user = await db.user.findUnique({
       where: { id: userId },
